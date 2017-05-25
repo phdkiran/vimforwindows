@@ -1,5 +1,19 @@
-" Required:
+﻿" Required:
 filetype plugin indent on
+
+if has("win32")
+  "Windows options here
+    let &shell='cmd.exe'
+    au GUIEnter * simalt ~x
+else
+  if has("unix")
+    let s:uname = system("uname")
+    let &shell='/bin/bash'
+    if s:uname == "Darwin\n"
+      "Mac options here
+    endif
+  endif
+endif
 
 "*****************************************************************************
 "" Basic Setup
@@ -9,7 +23,12 @@ set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
 set bomb
-" set binary
+setglobal fileencoding=utf-8
+set encoding=utf-8
+
+"setglobal bomb
+set fileencodings=ucs-bom,utf-8,latin1
+set binary
 set ttyfast
 
 "" Fix backspace indent
@@ -40,7 +59,6 @@ set noswapfile
 set fileformats=unix,dos,mac
 set showcmd
 
-let &shell='cmd.exe'
 
 " if exists('$SHELL')
 "     set shell=$SHELL
@@ -62,15 +80,15 @@ set ruler
 set number
 
 let no_buffers_menu=1
-" if !exists('g:not_finish_vimplug')
-"   colorscheme molokai
-" endif
-"
+if !exists('g:not_finish_vimplug')
+   colorscheme molokai
+endif
+
 
 set mousemodel=popup
 set t_Co=256
 set guioptions=egmrti
-set gfn=Monospace\ 10
+" set gfn=Monospace\ 10
 
 if has("gui_running")
   if has("gui_mac") || has("gui_macvim")
@@ -291,9 +309,9 @@ let g:UltiSnipsEditSplit="vertical"
 " syntastic
 let g:syntastic_always_populate_loc_list=1
 let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
+let g:syntastic_warning_symbol='x'
 let g:syntastic_style_error_symbol = '✗'
-let g:syntastic_style_warning_symbol = '⚠'
+let g:syntastic_style_warning_symbol = 'x'
 let g:syntastic_auto_loc_list=1
 let g:syntastic_aggregate_errors = 1
 
@@ -455,7 +473,7 @@ augroup vimrc-python
 augroup END
 
 " jedi-vim
-let g:jedi#popup_on_dot = 0
+" let g:jedi#popup_on_dot = 0
 let g:jedi#goto_assignments_command = "<leader>g"
 let g:jedi#goto_definitions_command = "<leader>d"
 let g:jedi#documentation_command = "K"
@@ -464,6 +482,7 @@ let g:jedi#rename_command = "<leader>r"
 let g:jedi#show_call_signatures = "0"
 let g:jedi#completions_command = "<C-Space>"
 let g:jedi#smart_auto_mappings = 0
+let g:jedi#rename_command = "<leader>r"
 
 " syntastic
 let g:syntastic_python_checkers=['python', 'flake8']
@@ -525,4 +544,40 @@ else
   let g:airline_symbols.linenr = ''
 endif
 
-colorscheme molokai
+" neosnippet
+" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)o
+inoremap <expr><Tab>        pumvisible() ? "\<C-n>" : "\<Tab>"
+" map <expr><TAB>
+" \ pumvisible() ? "\<C-n>" :
+" \ neosnippet#expandable_or_jumpable() ?
+" \    \<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+
+
+" neocomplete
+    let g:neocomplete#enable_at_startup = 1
+if !exists('g:neocomplete#force_omni_input_patterns')
+    let g:neocomplete#force_omni_input_patterns = {}
+endif
+ autocmd FileType python setlocal omnifunc=jedi#completions
+    let g:jedi#completions_enabled = 0
+    let g:jedi#auto_vim_configuration = 0
+    let g:jedi#smart_auto_mappings = 0
+    let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+    " alternative pattern: '\h\w*\|[^. \t]\.\w*'
+    "

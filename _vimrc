@@ -1,4 +1,4 @@
-" Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
+﻿" Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 call plug#begin('~/vimfiles/plugged')
 
 " Make sure you use single quotes
@@ -44,6 +44,9 @@ Plug 'scrooloose/syntastic'
 Plug 'Yggdroot/indentLine'
 Plug 'avelino/vim-bootstrap-updater'
 Plug 'sheerun/vim-polyglot'
+Plug 'Shougo/neocomplete'
+Plug 'Shougo/neosnippet'
+Plug 'Shougo/neosnippet-snippets'
 
 "" Color
 Plug 'tomasr/molokai'
